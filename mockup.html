@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Mockup</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Mockup Web AR</title>
+    <meta name="description" content="An example from my model-viewer" />
+
+    <meta property="og:title" content="Mockup Web AR" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:description"
+      content="An example from my model-viewer course"
+    />
+    <meta property="og:image" content="image.png" />
+
+    <link rel="manifest" href="../assets/favicon/site.webmanifest" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+
+    <style>
+        * {
+          scroll-behavior: smooth;
+        }
+  
+        .group:focus .group-focus\:flex {
+          display: flex;
+        }
+  
+        .progress-bar {
+          width: 100%;
+          height: 100%;
+          text-align: center;
+          color: white;
+          padding-top: 20%;
+          background-color: rgba(0, 0, 0, 0.315);
+          transition: all linear 2s;
+          opacity: 0;
+          transition: visibility 0s, opacity 0.2s linear;
+          pointer-events: none;
+        }
+  
+        model-viewer:hover > .progress-bar {
+          visibility: visible;
+          opacity: 1;
+        }
+  
+        /* preloading */
+        .lazy-load-poster {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          background-image: url("./clb735wirdh81.jpg");
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
+        }
+        .button-load {
+          background-image: url("../../assets/ic_get_app_white_24dp.svg");
+          background-repeat: no-repeat;
+          background-size: 16px 16px;
+          background-position: 6% 50%;
+          background-color: rgba(0, 0, 0, 0.575);
+          color: white;
+          cursor: pointer;
+          border-radius: 6px;
+          display: inline-block;
+          padding: 5px 9px 4.5px 20px;
+          font-weight: 500;
+          box-shadow: 0 0 8px rgba(0, 0, 0, 0.2), 0 0 4px rgba(0, 0, 0, 0.25);
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate3d(-50%, -50%, 0);
+          z-index: 100;
+        }
+        model-viewer#reveal {
+          --poster-color: transparent;
+        }
+  
+        /* error handling */
+        .error {
+          background-color: #ffffffdd;
+          border-radius: 16px;
+          padding: 16px;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate3d(-50%, -50%, 0);
+          transition: opacity 0.3s;
+        }
+        .error.hide {
+          opacity: 0;
+          visibility: hidden;
+          transition: visibility 2s, opacity 1s 1s;
+        }
+  
+        .Hotspot {
+          display: none;
+        }
+  
+        /* #progress-bar{
+          background-color: #000;
+          padding: 10px;
+        } */
+      </style>
+</head>
+<body>
+    <div class="mb-10 border-1 w-1/2">
+        <div class="cursor-pointer">
+            <model-viewer
+            id="model-viewer"
+              class="model-viewer w-full border-b-2"
+              alt="St. Pauli Light Grey Visitors Chair"
+              ar=""
+              ar-placement="floor"
+              ar-modes="scene-viewer webxr quick-look"
+              ar-scale="auto"
+              camera-controls=""
+              background-color="#ffffff"
+              environment-image="neutral"
+              shadow-intensity="1"
+              shadow-softness="1"
+              auto-rotate=""
+              reveal="interaction"
+              camera-controls
+              autoplay
+            >
+              <!-- error handling -->
+              <div id="error" class="hide error">
+                AR is not supported on this device
+              </div>
+              <!-- preloading -->
+              <div id="lazy-load-poster" slot="poster" class="lazy-load-poster"></div>
+    
+              <div id="progress-bar" slot="progress-bar" class="progress-bar">Click me!</div>
+    
+              <!-- custom ar button -->
+              <button
+                id="ar-button"
+                slot="ar-button"
+                class="ar-button"
+                style="
+                  background-color: white;
+                  border-radius: 4px;
+                  border: none;
+                  position: absolute;
+                  top: 16px;
+                  right: 16px;
+                  display: none;
+                "
+              >
+                👋 Activate AR
+              </button>
+    
+              <!-- Hotspot -->
+            </model-viewer>
+          </div>
+    </div>
+
+      <script>
+        // poster showcase
+        const posters = [
+          "./assets/By5Tp6iupPHqD9B2HjWiMS7zT5eUSAi1Y87rKIDZ.jpeg",
+        ];
+        const src = [
+          "./assets/685811StPauliVisitorsChair_LightGrey.glb",
+        ];
+        const iosrc = [
+          "./assets/809412StPauliVisitorsChair_LightGrey.usdz",
+        ];
+        const mainmodel = document.querySelectorAll(".model-viewer");
+        const togglePoster = document.querySelectorAll(".lazy-load-poster");
+        for (let index=0;index<mainmodel.length ;index++) {
+          mainmodel[index].setAttribute('src',src[0])
+          mainmodel[index].setAttribute('ios-src',iosrc[0])
+          togglePoster[index].style.backgroundImage = `url(./${posters[0]})`;
+
+  }
+
+        // error handling
+        let errorhand = document
+          .querySelectorAll(".model-viewer")
+              const error = document.querySelectorAll(".error");
+
+          for (let index=0;index<mainmodel.length ;index++) {
+            errorhand[index].addEventListener("ar-status", (event) => {
+            console.log(event);
+            if (event.detail.status === "failed") {
+              error[index].classList.remove("hide");
+              error[index].addEventListener("transitionend", (event) => {
+                  error[index].classList.add("hide");
+              });
+            }
+          });
+  }
+
+          
+        let progress = document
+          .querySelectorAll(".lazy-load-poster")
+          let bar = document.querySelectorAll(".progress-bar")
+
+          for (let index=0;index<mainmodel.length ;index++) {
+                 progress[index].addEventListener("click", () => {
+                  bar[index].remove();
+                  mainmodel[index].dismissPoster()
+          }); 
+  }
+          
+
+        // auto interpolate angles
+        // (() => {
+        //   const modelViewer = document.querySelector("#model-viewer");
+        //   const orbitCycle = [
+        //     "45deg 55deg 4m",
+        //     "-60deg 110deg 2m",
+        //     modelViewer.cameraOrbit,
+        //   ];
+
+        //   setInterval(() => {
+        //     const currentOrbitIndex = orbitCycle.indexOf(modelViewer.cameraOrbit);
+        //     modelViewer.cameraOrbit =
+        //       orbitCycle[(currentOrbitIndex + 1) % orbitCycle.length];
+        //   }, 3000);
+        // })();
+
+        // hidden till load
+        const targetDiv = document.querySelectorAll(".ar-button");
+        const btn = document.querySelectorAll(".model-viewer");
+        for (let index=0;index<mainmodel.length ;index++) {
+          btn[index].addEventListener("load", () => {
+          targetDiv[index].style.display = "block";
+        });   
+  }
+        
+      </script>
+</body>
+</html>

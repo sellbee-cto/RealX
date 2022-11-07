@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script
+      type="module"
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+    ></script>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>SellBee Web AR</title>
+    <meta name="description" content="An example from my model-viewer" />
+
+    <meta property="og:title" content="SellBee Web AR" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:description"
+      content="An example from my model-viewer course"
+    />
+    <link rel="icon" type="image/x-icon" href="./assets/meta.png" />
+    <meta property="og:image" content="image.png" />
+
+    <script
+      src="https://kit.fontawesome.com/a076d05399.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- <link rel="stylesheet" href="./css/styles.css" /> -->
+    <style>
+      * {
+        scroll-behavior: smooth;
+        box-sizing: border-box;
+        overflow-x: hidden;
+      }
+      html {
+        background-color: gb(243 244 246 / var(--tw-bg-opacity));
+      }
+      @media only screen and (max-width: 500px) {
+        html {
+          font-size: 14px !important;
+        }
+      }
+
+      .responsive {
+        width: 100%;
+        height: auto;
+        margin-bottom: 8%;
+      }
+      .productCard {
+        height: fit-content !important;
+      }
+
+      .group:focus .group-focus\:flex {
+        display: flex;
+      }
+
+      /* Typing animation area start */
+      .line-1 {
+        position: relative;
+
+        width: 100%;
+        /* margin: 0 auto; */
+        border-right: 2px solid rgba(255, 255, 255, 0.75);
+        font-size: 180%;
+        overflow: hidden;
+
+        /* text-align: center; */
+        white-space: nowrap;
+      }
+
+      .anim-typewriter {
+        animation: typewriter 3s steps(44) 1s 1 normal both,
+          blinkTextCursor 500ms steps(44) infinite normal;
+      }
+
+      .anim-typewriter-2 {
+        animation: typewriter 3s steps(44) 3s 1 normal both,
+          blinkTextCursor 500ms steps(44) infinite normal;
+      }
+
+      .anim-typewriter-3 {
+        animation: typewriter 3s steps(44) 5s 1 normal both,
+          blinkTextCursor 500ms steps(44) infinite normal;
+      }
+
+      .anim-typewriter-4 {
+        animation: typewriter 3s steps(44) 7s 1 normal both,
+          blinkTextCursor 500ms steps(44) infinite normal;
+      }
+      .anim-typewriter-5 {
+        animation: typewriter 3s steps(44) 9s 1 normal both,
+          blinkTextCursor 500ms steps(44) infinite normal;
+      }
+      @keyframes typewriter {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+      @keyframes blinkTextCursor {
+        from {
+          border-right-color: rgba(255, 255, 255, 0.75);
+        }
+        to {
+          border-right-color: transparent;
+        }
+      }
+
+      /* Typing animation area end */
+
+      .progress-bar {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        color: white;
+        padding-top: 20%;
+        background-color: rgba(0, 0, 0, 0.315);
+        transition: all linear 2s;
+        opacity: 0;
+        transition: visibility 0s, opacity 0.2s linear;
+        pointer-events: none;
+      }
+
+      model-viewer:hover > .progress-bar {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .borderBlack {
+        border: 2px solid black;
+      }
+
+      /* Home Apliance */
+      .homeAplianceProductSection {
+        display: none;
+      }
+
+      /* preloading */
+      .lazy-load-poster {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-image: url("./clb735wirdh81.jpg");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+      .button-load {
+        background-image: url("../../assets/ic_get_app_white_24dp.svg");
+        background-repeat: no-repeat;
+        background-size: 16px 16px;
+        background-position: 6% 50%;
+        background-color: rgba(0, 0, 0, 0.575);
+        color: white;
+        cursor: pointer;
+        border-radius: 6px;
+        display: inline-block;
+        padding: 5px 9px 4.5px 20px;
+        font-weight: 500;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.2), 0 0 4px rgba(0, 0, 0, 0.25);
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate3d(-50%, -50%, 0);
+        z-index: 100;
+      }
+      model-viewer#reveal {
+        --poster-color: transparent;
+      }
+
+      /* error handling */
+      .error {
+        background-color: #ffffffdd;
+        border-radius: 16px;
+        padding: 16px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate3d(-50%, -50%, 0);
+        transition: opacity 0.3s;
+      }
+      .error.hide {
+        opacity: 0;
+        visibility: hidden;
+        transition: visibility 2s, opacity 1s 1s;
+      }
+
+      .Hotspot {
+        display: none;
+      }
+
+      /* #progress-bar{
+        background-color: #000;
+        padding: 10px;
+      } */
+    </style>
+  </head>
+
+  <body>
+    <nav class="border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-900">
+      <div
+        class="container flex flex-wrap justify-between items-center mx-auto"
+      >
+        <div>
+          <a href="#" class="flex items-center h-full">
+            <img
+              src="./assets/logo/realxlogo.png"
+              class="mr-3 h-14 md:h-24 lg:h-28"
+              alt="SellBee Logo"
+            />
+            <!-- <span
+              class="self-center text-[1.3rem] md:text-3xl font-semibold whitespace-nowrap dark:text-white overflow-y-hidden"
+              >SellBee AR</span
+            > -->
+          </a>
+        </div>
+        <div class="text-[1rem] md:text-[1.2rem]">
+          <ul class="flex text-black">
+            <li class="lg:mr-4 md:mr-3 mr-2">
+              <a href="#">Dashboard</a>
+            </li>
+            <li class="lg:mr-4 md:mr-3 mr-2">
+              <a href="">About Us</a>
+            </li>
+            <li class="lg:mr-4 md:mr-3 mr-2">
+              <a href="/contact.html">Contact Us</a>
+            </li>
+            <li>
+              <a href="/career.html">Career</a>
+            </li>
+          </ul>
+        </div>
+        <!-- <div class="w-full block w-auto" id="navbar-default">
+          <ul class="flex flex-col p-4 mt-4 flex-row space-x-8 mt-0 text-sm font-medium border-0 bg-white">
+            <li>
+              <a href="#" class="block py-2 pr-4 pl-3 text-xl text-white bg-blue-700 rounded bg-transparent text-blue-700 p-0 dark:text-white" aria-current="page">Home</a>
+            </li> -->
+        <!-- <li>
+              <a href="about.html" class="block bg-transparent py-2 pr-4 pl-3 text-lg font-semibold text-gray-700 p-0 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white dark:hover:bg-transparent">About Us</a>
+            </li> -->
+        <!-- <li>
+              <a href="#" class="block py-2 pr-4 pl-3 text-xl text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Pricing</a>
+            </li>
+            <li>
+              <a href="#" class="block py-2 pr-4 pl-3 text-xl text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Contact Us</a>
+            </li>
+          </ul>
+        </div> -->
+      </div>
+    </nav>
+    <section>
+      <div class="pb-[0rem] lg:pb-[5rem] pt-[0rem] pl-[1rem]">
+        <div
+          class="w-100 mx-auto container flex justify-center items-center py-12 px-4 sm:px-6 2xl:px-0"
+        >
+          <!--- more free and premium Tailwind CSS components at https://tailwinduikit.com/ --->
+          <div
+            class="flex flex-col lg:flex-row justify-center items-center space-y-6 lg:space-y-0 pt-1"
+          >
+            <div
+              class="w-100 sm:w-auto flex flex-col justify-start items-start pr-auto pb-[1rem]"
+            >
+              <div>
+                <p
+                  class="text-2xl md:text-3xl xl:text-4xl font-semibold leading-9 text-gray-800 overflow-y-hidden p-1"
+                >
+                  Augmented Reality: The Future of Mobility.
+                </p>
+              </div>
+              <div class="mt-4 lg:w-4/5 xl:w-3/5">
+                <p
+                  class="text-base leading-6 text-gray-600 text-[1rem] md:text-[1.2rem] overflow-y-hidden p-1"
+                >
+                  We are here to help your company grow and achieve your
+                  business objectives with the power of custom AR solutions.
+                </p>
+              </div>
+              <!-- <div class="mt-16 w-full">
+                <a href="#model-viewer">
+                  <button
+                    class="px-4 bg-gray-900 flex justify-between items-center w-full lg:w-72 h-14 text-white hover:bg-gray-700 focus:ring-2 outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800"
+                  >
+                    <p class="text-xl font-medium leading-5">See More</p>
+                    <svg
+                      class=""
+                      width="32"
+                      height="32"
+                      viewBox="0 0 32 32"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6.66663 16H25.3333"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M20 21.3333L25.3333 16"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M20 10.6667L25.3333 16"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </a>
+              </div> -->
+            </div>
+            <!-- old mobile image div -->
+            <!-- <div
+              class="md:flex flex-col sm:flex-row jusitfy-center items-center sm:space-x-5 xl:space-x-8 space-y-4 sm:space-y-0"
+            >
+              <div class="">
+                <img
+                  class="hidden lg:block h-96"
+                  src="./assets/index.png"
+                  alt="sofa"
+                />
+                <img
+                  class="w-80 sm:w-auto lg:hidden -mb-40"
+                  src="./assets/index.png"
+                  alt="sofa"
+                />
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <section>
+        <div>
+          <img src="./assets/arDemoGif.gif" alt="Nature" class="responsive" />
+        </div>
+      </section>
+      <!-- Description Zone -->
+      <section
+        class="pl-[2rem] pr-[1rem] md:pl-[5rem] md:pr-[5rem] text-center borderDashed"
+      >
+        <div>
+          <h1 class="md:text-[2rem] text-2xl overflow-y-hidden font-semibold">
+            Augmented reality (AR) is the integration of digital information
+            with the users environment in real-time
+          </h1>
+        </div>
+        <div
+          class="sm:flex-row md:flex md:flex-row justify-between items-center text-left ml-[10%] mt-[4%]"
+        >
+          <div>
+            <!-- <p class="line-1 anim-typewriter">
+              Animation typewriter style using css steps()
+            </p> -->
+            <p class="text-[1rem] md:text-[1.2rem] line-1 anim-typewriter">
+              &#x2022; Visualize Virtual Objects Anywhere in the world.
+            </p>
+            <p class="text-[1rem] md:text-[1.2rem] line-1 anim-typewriter-2">
+              &#x2022; Walk around or step inside 3D models.
+            </p>
+            <p class="text-[1rem] md:text-[1.2rem] line-1 anim-typewriter-3">
+              &#x2022; Examine details close up and from all angles.
+            </p>
+            <p class="text-[1rem] md:text-[1.2rem] line-1 anim-typewriter-4">
+              &#x2022; Visualize and compare different states and variants of a
+              model.
+            </p>
+            <p class="text-[1rem] md:text-[1.2rem] line-1 anim-typewriter-5">
+              &#x2022; Make adjustments flexibly and in real-time.
+            </p>
+          </div>
+        </div>
+      </section>
+      <!-- Why Choose us -->
+      <section>
+        <div class="text-center pt-[4rem] md:pt-[7rem]">
+          <div
+            class="bg-gray-100 mt-4 text-[#000000bd] h-100 pl-[3rem] pr-[3rem] pb-[1rem] md:pb-[6rem] pt-[2rem]"
+          >
+            <h1 class="uppercase text-[1.2rem] md:text-[1.5rem]">
+              Why Choose Us
+            </h1>
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-[2rem] md:pl-[20%] md:pr-[20%]"
+            >
+              <div class="flex justify-center items-center">
+                <div class="mr-2">
+                  <img
+                    src="./assets/bag.png"
+                    class="w-[2.5rem] h-[2.5rem] inline-block"
+                    alt=""
+                  />
+                </div>
+                <div class="text-left w-40">
+                  <h1 class="text-[1rem] md:text-[1.2rem]">PROFESSIONAL</h1>
+                  <!-- <p class="text-[.8rem] text-[1rem]">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                  </p> -->
+                </div>
+              </div>
+              <div class="flex justify-center items-center">
+                <div class="mr-1">
+                  <img
+                    src="./assets/money.jpeg"
+                    class="w-[4rem] h-[4rem] inline-block"
+                    alt=""
+                  />
+                </div>
+                <div class="text-left w-40">
+                  <h1 class="text-[1rem] md:text-[1.2rem]">LOW COST</h1>
+                  <!-- <p class="text-[.8rem] text-[1rem]">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                  </p> -->
+                </div>
+              </div>
+              <div class="flex justify-center items-center">
+                <div class="mr-2">
+                  <img
+                    src="./assets/fast.png"
+                    class="w-[4rem] h-[2.5rem] inline-block"
+                    alt=""
+                  />
+                </div>
+                <div class="text-left w-40">
+                  <h1 class="text-[1rem] md:text-[1.2rem]">FAST</h1>
+                  <!-- <p class="text-[.8rem] md:text-[1rem]">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                  </p> -->
+                </div>
+              </div>
+              <div class="flex justify-center items-center">
+                <div class="">
+                  <img
+                    src="./assets/tools.png"
+                    class="w-[4rem] h-[2.5rem] inline-block"
+                    alt=""
+                  />
+                </div>
+                <div class="text-left w-40">
+                  <h1 class="text-[1rem] md:text-[1.2rem]">RESOURCE & TOOLS</h1>
+                  <!-- <p class="text-[.8rem] text-[1rem]">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                  </p> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Solution we provide -->
+      <section class="bg-gray-100 text-center pt-8 pb-[2rem]">
+        <h1 class="text-[1.7rem]">Solution We Provide</h1>
+        <div class="mt-5">
+          <button
+            class="bg-yellow-500 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-black-500 rounded md:w-[20%]"
+            id="furnishers"
+          >
+            Furnitures
+          </button>
+          <button
+            class="bg-black hover:bg-yellow-500 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-back-500 rounded md:w-[20%]"
+            id="homeApliance"
+          >
+            Home Appliances
+          </button>
+        </div>
+        <div></div>
+      </section>
+      <div
+        class="flex flex-col w-screen md:h-[70] min-h-screen md:p-10 p-4 mt-[-4rem] bg-gray-100 text-gray-800]"
+      >
+        <!-- Component Start -->
+        <!-- <h1 class="text-3xl font-bold pt-24 md:pt-0 -mb-10 md:mb-0">Demo</h1> -->
+        <div
+          class="flex flex-col sm:flex-row sm:items-end sm:justify-between mt-6"
+        >
+          <!-- <span class="text-sm font-semibold">1-16 of 148 Products</span> -->
+          <button
+            class="relative text-sm focus:outline-none group mt-4 sm:mt-0"
+          >
+            <!-- <div
+              class="flex items-center justify-between w-40 h-10 px-3 border-2 border-gray-300 rounded hover:bg-gray-300"
+            >
+              <span class="font-medium"> Popular </span>
+              <svg
+                class="w-4 h-4"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div> -->
+            <div
+              class="absolute z-10 flex-col items-start hidden w-full pb-1 bg-white shadow-lg rounded group-focus:flex"
+            >
+              <a class="w-full px-4 py-2 text-left hover:bg-gray-200" href="#"
+                >Popular</a
+              >
+              <a class="w-full px-4 py-2 text-left hover:bg-gray-200" href="#"
+                >Featured</a
+              >
+              <a class="w-full px-4 py-2 text-left hover:bg-gray-200" href="#"
+                >Newest</a
+              >
+              <a class="w-full px-4 py-2 text-left hover:bg-gray-200" href="#"
+                >Lowest Price</a
+              >
+              <a class="w-full px-4 py-2 text-left hover:bg-gray-200" href="#"
+                >Highest Price</a
+              >
+            </div>
+          </button>
+        </div>
+                <div class="productZone">
+          <div
+            class="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-2 md:gap-x-6 md:gap-y-12 gap-x-2 gap-y-6 w-full productAddingDiv"
+          >
+            <!-- card -->
+            <!-- <div
+          class="bg-white shadow-md rounded-lg hover:scale-105 hover:shadow-xl duration-500"
+          >
+          <div class="cursor-pointer">
+          <a href="choshma.html" target="__blank"><img src="./assets/sunglasses_PNG155.png" alt=""></a>
+          </div>
+          
+          <div class="px-4 py-3 w-full">
+            <span class="text-gray-400 mr-3 uppercase text-xs">Brand</span>
+            <p class="text-lg font-bold text-black truncate block capitalize">
+              Product Name
+            </p>
+            <div class="flex items-center">
+              <p class="text-lg font-semibold text-black cursor-auto my-3">
+                $149
+              </p>
+              <del>
+                <p class="text-sm text-gray-600 cursor-auto ml-2">$199</p>
+              </del>
+              <div class="ml-auto">
+                <a href="#">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            fill="currentColor"
+            class="bi bi-bag-plus"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z"
+            />
+            <path
+              d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"
+            />
+          </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          </div> -->
+          </div>
+          <div
+            class="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-2 md:gap-x-6 md:gap-y-12 gap-x-2 gap-y-6 w-full productAddingDivHomeApliance"
+          >
+            <!-- card -->
+            <!-- <div
+          class="bg-white shadow-md rounded-lg hover:scale-105 hover:shadow-xl duration-500"
+          >
+          <div class="cursor-pointer">
+          <a href="choshma.html" target="__blank"><img src="./assets/sunglasses_PNG155.png" alt=""></a>
+          </div>
+          
+          <div class="px-4 py-3 w-full">
+            <span class="text-gray-400 mr-3 uppercase text-xs">Brand</span>
+            <p class="text-lg font-bold text-black truncate block capitalize">
+              Product Name
+            </p>
+            <div class="flex items-center">
+              <p class="text-lg font-semibold text-black cursor-auto my-3">
+                $149
+              </p>
+              <del>
+                <p class="text-sm text-gray-600 cursor-auto ml-2">$199</p>
+              </del>
+              <div class="ml-auto">
+                <a href="#">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            fill="currentColor"
+            class="bi bi-bag-plus"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z"
+            />
+            <path
+              d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"
+            />
+          </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          </div> -->
+          </div>
+        </div>
+      </div>
+        <!-- <div class="flex justify-center mt-10 space-x-1">
+            <button class="flex items-center justify-center h-8 w-8 rounded text-gray-400">
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            <button class="flex items-center justify-center h-8 px-2 rounded text-sm font-medium text-gray-400" disabled>
+                Prev
+            </button>
+            <button class="flex items-center justify-center h-8 w-8 rounded bg-indigo-200 text-sm font-medium text-indigo-600" disabled>
+                1
+            </button>
+            <button class="flex items-center justify-center h-8 w-8 rounded hover:bg-indigo-200 text-sm font-medium text-gray-600 hover:text-indigo-600">
+                2
+            </button>
+            <button class="flex items-center justify-center h-8 w-8 rounded hover:bg-indigo-200 text-sm font-medium text-gray-600 hover:text-indigo-600">
+                3
+            </button>
+            <button class="flex items-center justify-center h-8 px-2 rounded hover:bg-indigo-200 text-sm font-medium text-gray-600 hover:text-indigo-600">
+                Next
+            </button>
+            <button class="flex items-center justify-center h-8 w-8 rounded hover:bg-indigo-200 text-gray-600 hover:text-indigo-600">
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div> -->
+        <!-- Component End  -->
+
+        <script>
+          // Furnishers Data
+          // poster showcase
+          const posters = [
+            "./assets/bed.jpg",
+            "./assets/bed.jpeg",
+            "./assets/bedlamp.jpg",
+            "./assets/cathouse.jpg",
+            "./assets/chair.jpg",
+            "./assets/coffeetable.jpg",
+            "./assets/sofa.jpg",
+            "./assets/stool.jpg",
+            "./assets/table.jpg",
+            "./assets/By5Tp6iupPHqD9B2HjWiMS7zT5eUSAi1Y87rKIDZ.jpeg",
+          ];
+          const src = [
+            "./assets/Bed.glb",
+            "./assets/bed2.glb",
+            "./assets/bedlamp.glb",
+            "./assets/cathouse.glb",
+            "./assets/uploads_files_971905_N01_Beech.glb",
+            "./assets/coffeetable.glb",
+            "./assets/sofa.glb",
+            "./assets/Stool.glb",
+            "./assets/table.glb",
+            "./assets/685811StPauliVisitorsChair_LightGrey.glb",
+          ];
+          const iosrc = [
+            "./assets/bed.usdz",
+            "./assets/bed2.usdz",
+            "./assets/bedlamp.usdz",
+            "./assets/cathouse.usdz",
+            "./assets/uploads_files_971905_N01_Beech.usdz",
+            "./assets/coffeetable.usdz",
+            "./assets/sofa.usdz",
+            "./assets/Stool.usdz",
+            "./assets/table.usdz",
+            "./assets/809412StPauliVisitorsChair_LightGrey.usdz",
+          ];
+
+          // Home Apliance Data
+          // Home Apliance Data
+          const postersHomeApliance = ["./assets/refrigerator-test.jpeg", "./assets/homeAppliance/AC/acPoster.jpg", "./assets/homeAppliance/BathTub/bathTubPoster.png", "./assets/homeAppliance/ceiling_fan/ceilingFanPoster.png", "./assets/homeAppliance/freezer/freezerPoster.jpeg", "./assets/homeAppliance/kitchen_sink/kitchenSinkPoster.png", "./assets/homeAppliance/Toilet/toilet.png", "./assets/homeAppliance/wall_socket/wallSocketPoster.jpg", "./assets/homeAppliance/walltv/wallTvPoster.jpg", "./assets/homeAppliance/Washing_Machine/washingMechinePoster.png", "./assets/homeAppliance/water_tap/waterTapPoster.png"];
+
+          const srcHomeApliance = ["./assets/refrigerator-test.glb", "./assets/homeAppliance/AC/model.glb","./assets/homeAppliance/BathTub/bathtub.glb", "./assets/homeAppliance/ceiling_fan/conion_ceiling_fan.glb", "./assets/homeAppliance/freezer/market_freezer.glb", "./assets/homeAppliance/kitchen_sink/kitchen_sink.glb", "./assets/homeAppliance/Toilet/toilet.glb", "./assets/homeAppliance/wall_socket/electrical_switch_board__power_socket.glb", "./assets/homeAppliance/walltv/television_wall-mounted.glb", "./assets/homeAppliance/Washing_Machine/drum_washing_machine.glb", "./assets/homeAppliance/water_tap/boiling_water_tap.glb"];
+
+          const iosrcHomeApliance = ["./assets/refrigerator-test.usdz", "./assets/homeAppliance/AC/model.usdz","./assets/homeAppliance/BathTub/bathtub.usdz", "./assets/homeAppliance/ceiling_fan/conion_ceiling_fan.usdz", "./assets/homeAppliance/freezer/Market_Freezer.usdz", "./assets/homeAppliance/kitchen_sink/Kitchen_sink.usdz", "./assets/homeAppliance/Toilet/toilet.usdz", "./assets/homeAppliance/wall_socket/Electrical_Switch_Board__Power_Socket.usdz", "./assets/homeAppliance/walltv/Television_Wall-mounted.usdz", "./assets/homeAppliance/Washing_Machine/Drum_washing_machine.usdz", "./assets/homeAppliance/water_tap/Boiling_Water_Tap.usdz"];
+
+          const mainmodel = document.querySelectorAll(".model-viewer");
+          const productCards = document.querySelectorAll(".productCard");
+          const togglePoster = document.querySelectorAll(".lazy-load-poster");
+          const productAddingDiv = document.querySelector(".productAddingDiv");
+          const productAddingDivHomeApliance = document.querySelector(
+            ".productAddingDivHomeApliance"
+          );
+
+          // Note: Rendering Data Depend on posters array size.
+          function loadFurnishers() {
+            const posterLength = posters.length;
+            loadedFurnishersData = true;
+            // for (let index = 0; index < mainmodel.length; index++) {
+            //   // removed unnessaray product card
+            //   if (index > posterLength - 1) {
+            //     productCards[index].style.display = "none";
+            //   } else {
+            //     productCards[index].style.display = "block";
+            //   }
+            //   mainmodel[index].setAttribute("src", src[index]);
+            //   mainmodel[index].setAttribute("ios-src", iosrc[index]);
+            //   togglePoster[
+            //     index
+            //   ].style.backgroundImage = `url(./${posters[index]})`;
+            // }
+
+            // Add Dynamic Furnishers Product
+            for (let index = 0; index < posterLength; index++) {
+              let html = ` <div
+              class="bg-white shadow-md rounded-lg hover:scale-105 hover:shadow-xl duration-500 productCard"
+            >
+              <div class="cursor-pointer">
+                <model-viewer
+                  id="model-viewer"
+                  class="model-viewer w-full border-b-2"
+                  alt="St. Pauli Light Grey Visitors Chair"
+                  ar=""
+                  src=${src[index]}
+                  ios-src=${iosrc[index]}
+                  ar-placement="floor"
+                  ar-modes="scene-viewer webxr quick-look"
+                  ar-scale="auto"
+                  camera-controls=""
+                  background-color="#ffffff"
+                  environment-image="neutral"
+                  shadow-intensity="1"
+                  shadow-softness="1"
+                  auto-rotate=""
+                  reveal="interaction"
+                  camera-controls
+                  autoplay
+                >
+                  <!-- error handling -->
+                  <div id="error" class="hide error">
+                    AR is not supported on this device
+                  </div>
+                  <!-- preloading -->
+                  <div
+                    id="lazy-load-poster"
+                    slot="poster"
+                    class="lazy-load-poster"
+                     style="
+                      background-image: url(./${posters[index]})
+                    "
+                  ></div>
+                  <div
+                    id="progress-bar"
+                    slot="progress-bar"
+                    class="progress-bar"
+                  >
+                    Click me!
+                  </div>
+                  <!-- custom ar button -->
+                  <button
+                    id="ar-button"
+                    slot="ar-button"
+                    class="ar-button"
+                    style="
+                      background-color: white;
+                      border-radius: 4px;
+                      border: none;
+                      position: absolute;
+                      top: 16px;
+                      right: 16px;
+                      display: none;
+                    "
+                  >
+                    👋 Activate AR
+                  </button>
+                  <!-- Hotspot -->
+                </model-viewer>
+              </div>
+              
+            </div>`;
+              productAddingDiv.insertAdjacentHTML("beforeend", html);
+            }
+          }
+
+          function add3DShowingFeatureFurnishers() {
+            console.log("add3DShowingFeature iam function");
+            const mainmodel = document.querySelectorAll(".model-viewer");
+
+            let progress = document.querySelectorAll(".lazy-load-poster");
+            let bar = document.querySelectorAll(".progress-bar");
+
+            for (let index = 0; index < mainmodel.length; index++) {
+              console.log(mainmodel);
+              console.log(bar);
+              progress[index].addEventListener("click", () => {
+                console.log("I am called");
+                bar[index].remove();
+                mainmodel[index].dismissPoster();
+              });
+            }
+          }
+          function add3DShowingFeatureHomeApliance() {
+            console.log("add3DShowingFeature iam function");
+            const mainmodel = document.querySelectorAll(
+              ".model-viewer-homeApliance"
+            );
+
+            let progress = document.querySelectorAll(
+              ".lazy-load-poster-homeApliance"
+            );
+            let bar = document.querySelectorAll(".progress-bar-homeApliance");
+
+            for (let index = 0; index < mainmodel.length; index++) {
+              console.log(mainmodel);
+              console.log(bar);
+              progress[index].addEventListener("click", () => {
+                console.log("I am called");
+                bar[index].remove();
+                mainmodel[index].dismissPoster();
+              });
+            }
+          }
+
+          function loadHomeApliance() {
+            const posterLength = postersHomeApliance.length;
+            loadedHomeAplianceData = true;
+            // for (let index = 0; index < mainmodel.length; index++) {
+            //   // removed unnessaray product card
+            //   if (index > posterLength - 1) {
+            //     productCards[index].style.display = "none";
+            //   } else {
+            //     productCards[index].style.display = "block";
+            //   }
+
+            //   mainmodel[index].setAttribute("src", srcHomeApliance[index]);
+            //   mainmodel[index].setAttribute(
+            //     "ios-src",
+            //     iosrcHomeApliance[index]
+            //   );
+            //   togglePoster[
+            //     index
+            //   ].style.backgroundImage = `url(./${postersHomeApliance[index]})`;
+            // }
+            // Add Dynamic Home Apliance Products
+            for (let index = 0; index < posterLength; index++) {
+              let html = ` <div
+              class="bg-white shadow-md rounded-lg hover:scale-105 hover:shadow-xl duration-500 productCard"
+            >
+              <div class="cursor-pointer">
+                <model-viewer
+                  id="model-viewer"
+                  class="model-viewer-homeApliance w-full border-b-2"
+                  alt="St. Pauli Light Grey Visitors Chair"
+                  ar=""
+                  src=${srcHomeApliance[index]}
+                  ios-src=${iosrcHomeApliance[index]}
+                  ar-placement="floor, wall"
+                  ar-modes="scene-viewer webxr quick-look"
+                  ar-scale="auto"
+                  camera-controls=""
+                  background-color="#ffffff"
+                  environment-image="neutral"
+                  shadow-intensity="1"
+                  shadow-softness="1"
+                  auto-rotate=""
+                  reveal="interaction"
+                  camera-controls
+                  autoplay
+                >
+                  <!-- error handling -->
+                  <div id="error" class="hide error">
+                    AR is not supported on this device
+                  </div>
+                  <!-- preloading -->
+                  <div
+                    id="lazy-load-poster"
+                    slot="poster"
+                    class="lazy-load-poster lazy-load-poster-homeApliance"
+                     style="
+                      background-image: url(./${postersHomeApliance[index]})
+                    "
+                  ></div>
+                  <div
+                    id="progress-bar"
+                    slot="progress-bar"
+                    class="progress-bar progress-bar-homeApliance"
+                  >
+                    Click me!
+                  </div>
+                  <!-- custom ar button -->
+                  <button
+                    id="ar-button"
+                    slot="ar-button"
+                    class="ar-button"
+                    style="
+                      background-color: white;
+                      border-radius: 4px;
+                      border: none;
+                      position: absolute;
+                      top: 16px;
+                      right: 16px;
+                      display: none;
+                    "
+                  >
+                    👋 Activate AR
+                  </button>
+                  <!-- Hotspot -->
+                </model-viewer>
+              </div>
+              
+            </div>`;
+              productAddingDivHomeApliance.insertAdjacentHTML(
+                "beforeend",
+                html
+              );
+            }
+          }
+
+          // error handling
+          let errorhand = document.querySelectorAll(".model-viewer");
+          const error = document.querySelectorAll(".error");
+
+          for (let index = 0; index < mainmodel.length; index++) {
+            errorhand[index].addEventListener("ar-status", (event) => {
+              console.log(event);
+              if (event.detail.status === "failed") {
+                error[index].classList.remove("hide");
+                error[index].addEventListener("transitionend", (event) => {
+                  error[index].classList.add("hide");
+                });
+              }
+            });
+          }
+
+          let progress = document.querySelectorAll(".lazy-load-poster");
+          let bar = document.querySelectorAll(".progress-bar");
+
+          for (let index = 0; index < mainmodel.length; index++) {
+            console.log(mainmodel);
+            progress[index].addEventListener("click", () => {
+              console.log("I am called");
+              bar[index].remove();
+              mainmodel[index].dismissPoster();
+            });
+          }
+
+          // auto interpolate angles
+          // (() => {
+          //   const modelViewer = document.querySelector("#model-viewer");
+          //   const orbitCycle = [
+          //     "45deg 55deg 4m",
+          //     "-60deg 110deg 2m",
+          //     modelViewer.cameraOrbit,
+          //   ];
+
+          //   setInterval(() => {
+          //     const currentOrbitIndex = orbitCycle.indexOf(modelViewer.cameraOrbit);
+          //     modelViewer.cameraOrbit =
+          //       orbitCycle[(currentOrbitIndex + 1) % orbitCycle.length];
+          //   }, 3000);
+          // })();
+
+          // hidden till load
+          const targetDiv = document.querySelectorAll(".ar-button");
+          const btn = document.querySelectorAll(".model-viewer");
+          for (let index = 0; index < mainmodel.length; index++) {
+            btn[index].addEventListener("load", () => {
+              targetDiv[index].style.display = "block";
+            });
+          }
+
+          // working with button
+          const furnishersButton = document.getElementById("furnishers");
+          const homeAplianceButton = document.getElementById("homeApliance");
+          const productZone = document.querySelector(".productZone");
+
+          // Helper Variable
+          let loadedFurnishersData = false;
+          let loadedHomeAplianceData = false;
+
+          // Load Furnishers By Default
+          loadFurnishers();
+          add3DShowingFeatureFurnishers();
+
+          // show furnishers products
+          furnishersButton.addEventListener("click", () => {
+            if (!loadedFurnishersData) {
+              loadFurnishers();
+              add3DShowingFeatureFurnishers();
+            }
+            productAddingDivHomeApliance.style.display = "none";
+            productAddingDiv.style.display = "grid";
+            productZone.style.display = "block";
+            furnishersButton.style.backgroundColor =
+              "rgb(234 179 8 / var(--tw-bg-opacity)";
+            homeAplianceButton.style.backgroundColor = "black";
+          });
+          // show home Apliance products
+          homeAplianceButton.addEventListener("click", () => {
+            if (!loadedHomeAplianceData) {
+              loadHomeApliance();
+              add3DShowingFeatureHomeApliance();
+            }
+
+            productAddingDivHomeApliance.style.display = "grid";
+            productAddingDiv.style.display = "none";
+            productZone.style.display = "block";
+            homeAplianceButton.style.backgroundColor =
+              "rgb(234 179 8 / var(--tw-bg-opacity)";
+            furnishersButton.style.backgroundColor = "black";
+          });
+        </script>
+      </section>
+      <!-- home apliance products -->
+    </section>
+    <footer class="text-center p-4">
+      <h2>ALL RIGHT RESERVED RealX 2022</h2>
+    </footer>
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+      var Tawk_API = Tawk_API || {},
+        Tawk_LoadStart = new Date();
+      (function () {
+        var s1 = document.createElement("script"),
+          s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = "https://embed.tawk.to/634f72afb0d6371309ca4632/1gfn5g0b7";
+        s1.charset = "UTF-8";
+        s1.setAttribute("crossorigin", "*");
+        s0.parentNode.insertBefore(s1, s0);
+      })();
+    </script>
+    <!--End of Tawk.to Script-->
+  </body>
+</html>
