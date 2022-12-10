@@ -19,7 +19,7 @@
 <button id="submit-button">Update Model</button>
     <!-- All you need to put beautiful, interactive 3D content on your site: -->
     <model-viewer id="my-model" 
-				src="https://cdn.glitch.com/36cb8393-65c6-408d-a538-055ada20431b/Astronaut.glb"
+				src="./chair.glb"
                   ios-src="./assets/hello.usdz"
                   poster="https://cdn.glitch.com/36cb8393-65c6-408d-a538-055ada20431b%2Fposter-astronaut.png"
                   alt="A 3D model of an astronaut"
@@ -43,7 +43,7 @@
 		  const modelUrl = inputField.value;
 	  
 		  // Set the src attribute of the image element to the value of the input field
-		  image.setAttribute('ios-src', modelUrl);
+		  image.setAttribute('src', modelUrl);
 		});
 	  </script>
 
